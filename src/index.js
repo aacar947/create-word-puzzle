@@ -31,10 +31,10 @@ export default function createPuzzle({
     maxWordLength,
     width * height
   );
-  // create empty table matrix
-  const table = createEmptyTableArray(height, width);
+  // create empty grid matrix
+  const grid = createEmptyGridArray(height, width);
   // place words
-  const unplacedWords = placeWords(table, _wordlist, {
+  const unplacedWords = placeWords(grid, _wordlist, {
     height,
     width,
     shareLetters,
@@ -42,10 +42,10 @@ export default function createPuzzle({
     reverseWordRatio,
   });
   // fill empty cells with random letters
-  fillEmptyCells(table);
+  fillEmptyCells(grid);
 
   return {
-    table,
+    grid,
     wordlist: _wordlist,
     margin,
     width,
@@ -92,16 +92,16 @@ function createAWordList(wordlist, listSize, minWordLength, maxWordLength, area)
   });
 }
 
-function createEmptyTableArray(height, width) {
-  const table = new Array(height).fill(0).map(() => {
+function createEmptyGridArray(height, width) {
+  const grid = new Array(height).fill(0).map(() => {
     return new Array(width).fill(0);
   });
 
-  return table;
+  return grid;
 }
 
 function placeWords(
-  table,
+  grid,
   wordlist,
   { height, width, shareLetters, allowReverseWords, reverseWordRatio }
 ) {
@@ -139,7 +139,7 @@ function placeWords(
       for (let j = 0; j < directions.length; j++) {
         const index = (j + dirIndex) % directions.length;
         dir = directions[index];
-        empty = isEmpty(table, word, dir, cell.x, cell.y, shareLetters);
+        empty = isEmpty(grid, word, dir, cell.x, cell.y, shareLetters);
         if (!empty) {
           continue;
         } else break;
@@ -151,7 +151,7 @@ function placeWords(
 
     if (empty) {
       const reverse = allowReverseWords && Math.random() < reverseWordRatio;
-      placeWord(table, closedSet, { start: cell, word, dir, reverse });
+      placeWord(grid, closedSet, { start: cell, word, dir, reverse });
       const start = reverse
         ? [getEndPoint(cell.x, dir.x, word.length), getEndPoint(cell.y, dir.y, word.length)]
         : [cell.x, cell.y];
@@ -175,13 +175,13 @@ function getDirIndex(cell, h, w) {
   return randomInt(2, 4);
 }
 
-function placeWord(table, closedSet, { start, word, dir, reverse }) {
+function placeWord(grid, closedSet, { start, word, dir, reverse }) {
   let x = reverse ? getEndPoint(start.x, dir.x, word.length) : start.x;
   let y = reverse ? getEndPoint(start.y, dir.y, word.length) : start.y;
   const factor = reverse ? -1 : 1;
 
   for (const char of word) {
-    table[x][y] = char;
+    grid[x][y] = char;
     closedSet[x + ',' + y] = 1;
     x += dir.x * factor;
     y += dir.y * factor;
@@ -192,13 +192,13 @@ function getEndPoint(start, dir, len) {
   return start + (len - 1) * dir;
 }
 
-function isEmpty(table, word, dir, x, y, shareLetters) {
+function isEmpty(grid, word, dir, x, y, shareLetters) {
   let empty = true,
     shared = false;
   if (!dir.check(word.length, x, y)) return false;
   for (const char of word) {
-    const sameChar = char.toUpperCase() === ('' + table[x][y]).toUpperCase();
-    empty = table[x][y] === 0 || (shareLetters && !shared && sameChar);
+    const sameChar = char.toUpperCase() === ('' + grid[x][y]).toUpperCase();
+    empty = grid[x][y] === 0 || (shareLetters && !shared && sameChar);
     shared = sameChar;
     if (!empty) break;
     x += dir.x;
@@ -221,10 +221,10 @@ function getOpenSet(h, w, l, closedSet) {
   return openset;
 }
 
-function fillEmptyCells(table) {
-  table.forEach((row, x) => {
+function fillEmptyCells(grid) {
+  grid.forEach((row, x) => {
     row.forEach((cell, y) => {
-      if (!cell) table[x][y] = String.fromCharCode(randomInt(65, 91));
+      if (!cell) grid[x][y] = String.fromCharCode(randomInt(65, 91));
     });
   });
 }
