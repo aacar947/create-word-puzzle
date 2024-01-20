@@ -24,7 +24,7 @@ export default function createPuzzle({
   reverseWordRatio = clamp(reverseWordRatio * 100, 0, 100) / 100;
 
   // create word list
-  const _wordlist = createAWordList(
+  const _wordlist = createAValidWordList(
     wordlist,
     listSize,
     minWordLength,
@@ -34,7 +34,7 @@ export default function createPuzzle({
   // create empty grid matrix
   const grid = createEmptyGridArray(height, width);
   // place words
-  const unplacedWords = placeWords(grid, _wordlist, {
+  placeWords(grid, _wordlist, wordlist, {
     height,
     width,
     shareLetters,
@@ -46,7 +46,7 @@ export default function createPuzzle({
 
   return {
     grid,
-    wordlist: _wordlist,
+    wordlist: _wordlist.filter((w) => w),
     margin,
     width,
     height,
@@ -56,23 +56,19 @@ export default function createPuzzle({
     allowReverseWords,
     reverseWordRatio,
     shareLetters,
-    unplacedWords: unplacedWords.concat(wordlist.filter((w) => w)),
+    unplacedWords: wordlist,
   };
 }
 
-function createAWordList(wordlist, listSize, minWordLength, maxWordLength, area) {
-  const filteredWordlist = wordlist.concat([]).filter((w, i) => {
-    const check = w.length <= maxWordLength && w.length >= minWordLength;
-    console.log(w, check, i);
-    if (check) wordlist[i] = 0;
-    return check;
-  });
-
-  const length =
-    listSize === undefined ? filteredWordlist.length : Math.min(filteredWordlist.length, listSize);
-  if (!length) return [];
+function createAValidWordList(wordlist, listSize, minWordLength, maxWordLength, area) {
+  const filteredWordlist = wordlist
+    .concat([])
+    .filter((w, i) => w.length <= maxWordLength && w.length >= minWordLength);
 
   const result = [];
+  const length = Math.min(filteredWordlist.length, listSize) || filteredWordlist.length;
+
+  if (!length) return result;
 
   for (let i = 0; i < length; i++) {
     // pick random words
@@ -103,6 +99,7 @@ function createEmptyGridArray(height, width) {
 function placeWords(
   grid,
   wordlist,
+  originalWordlist,
   { height, width, shareLetters, allowReverseWords, reverseWordRatio }
 ) {
   const directions = [
@@ -115,19 +112,17 @@ function placeWords(
   // Sort wordlist from maximum word length to minimum
   const sortedWordlist = [...wordlist].sort((a, b) => b.value.length - a.value.length);
   const closedSet = {};
-  const unplacedWords = [];
 
   for (let i = 0; i < sortedWordlist.length; i++) {
-    const word = sortedWordlist[i].value.toUpperCase();
+    const word = sortedWordlist[i].value;
     let cell, dir;
     let empty = true;
     const openSet = getOpenSet(height, width, word.length, closedSet);
 
     do {
       if (openSet.length <= 0) {
-        wordlist.splice(sortedWordlist[i].index, 1);
+        wordlist[sortedWordlist[i].index] = 0;
         empty = false;
-        unplacedWords.push(word);
         break;
       }
 
@@ -144,6 +139,7 @@ function placeWords(
           continue;
         } else break;
       }
+
       if (!empty) {
         openSet.splice(cellIndex, 1);
       }
@@ -151,7 +147,7 @@ function placeWords(
 
     if (empty) {
       const reverse = allowReverseWords && Math.random() < reverseWordRatio;
-      placeWord(grid, closedSet, { start: cell, word, dir, reverse });
+      placeWord(grid, closedSet, { start: cell, word: word.toUpperCase(), dir, reverse });
       const start = reverse
         ? [getEndPoint(cell.x, dir.x, word.length), getEndPoint(cell.y, dir.y, word.length)]
         : [cell.x, cell.y];
@@ -161,9 +157,11 @@ function placeWords(
       wordlist[sortedWordlist[i].index].start = start;
       wordlist[sortedWordlist[i].index].end = end;
       wordlist[sortedWordlist[i].index].reverse = reverse;
+      // remove from original wordlist
+      const originalIndex = originalWordlist.indexOf(word);
+      originalWordlist.splice(originalIndex, 1);
     }
   }
-  return unplacedWords;
 }
 
 function getDirIndex(cell, h, w) {
