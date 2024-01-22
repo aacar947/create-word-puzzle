@@ -215,7 +215,7 @@ function getOpenSet(h, w, l, closedSet) {
   const maxY = w - l;
   for (let i = 0; i < h * w; i++) {
     const x = Math.floor(i / w);
-    const y = Math.floor(i % h);
+    const y = Math.floor(i % w);
     if (x > maxX && y > maxY) continue;
     if (closedSet[x + ',' + y]) continue;
     openset.push({ x, y });
