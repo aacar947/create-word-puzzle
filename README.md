@@ -1,21 +1,27 @@
 # Create Word Puzzle
 
-Generate customizable word search puzzles of any size with this versatile npm package.
+Generate customizable word search puzzles of any size with this versatile npm package. Because, let's face it, what developer doesn't dream of creating puzzles instead of solving coding challenges? Or, let me do better— who doesn't need puzzles in their lives? Well, that's where Create Word Puzzle comes in. Have fun with this needfull tool.
 
 ## Table of Contents
 
+1. [Examples](#examples)
 1. [Installation](#installation)
 1. [Usage](#usage)
 1. [Options](#options)
 1. [Contributing](#contributing)
 1. [License](#license)
 
+## Examples
+
+- [🚀 Demo](https://aacar947.github.io/demo-create-word-puzzle.io/)
+- [🚀 Example Project](https://github.com/aacar947/word-search-puzzle)
+
 ## Installation
 
 You can install the library using npm:
 
 ```shell
-npm install create-word-puzzle
+npm i create-word-puzzle
 ```
 
 ## Usage
@@ -26,7 +32,7 @@ npm install create-word-puzzle
 import createWordPuzzle from 'create-word-puzzle';
 ```
 
-in Node.js:
+- in Node.js:
 
 ```js
 const createWordPuzzle = require('create-word-puzzle');
@@ -76,17 +82,17 @@ const puzzle = createWordPuzzle({
 
 Here are all the options you can provide to customize the puzzle:
 
-| Name              | Type    |  Default  | Description                                                                               |
-| :---------------- | :------ | :-------: | :---------------------------------------------------------------------------------------- |
-| wordlist          | array   |    []     | List of words to include in the word search puzzle.                                       |
-| width             | number  |    11     | Width of the word search puzzle grid.                                                     |
-| height            | number  |    11     | Height of the word search puzzle grid.                                                    |
-| minWordLength     | number  |     3     | Minimum length of words to be included in the puzzle.                                     |
-| listSize          | number  | undefined | Number of words to be included in the puzzle.                                             |
-| margin            | number  |     0     | Margin between the maximum word length and the maximum grid dimension in the puzzle grid. |
-| shareLetters      | boolean |   true    | Whether words in the puzzle can share letters.                                            |
-| allowReverseWords | boolean |   true    | Whether to allow words to appear in reverse order.                                        |
-| reverseWordRatio  | number  |   0.33    | Ratio of words that can appear in reverse order in grid.                                  |
+| Name              | Type    |  Default  | Description                                                                                                                                                                                                                |
+| :---------------- | :------ | :-------: | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| wordlist          | array   |    []     | List of words to include in the word search puzzle. This array will be modified and returned in the unplacedWords property.                                                                                                |
+| width             | number  |    11     | Width of the word search puzzle grid.                                                                                                                                                                                      |
+| height            | number  |    11     | Height of the word search puzzle grid.                                                                                                                                                                                     |
+| minWordLength     | number  |     3     | Minimum length of words to be included in the puzzle.                                                                                                                                                                      |
+| listSize          | number  | undefined | The listSize parameter specifies the number of words to be included in the puzzle. In some cases, the algorithm may not be able to fit all the provided words due to constraints such as grid dimensions and word lengths. |
+| margin            | number  |     0     | Specify the margin between the maximum word length and the maximum grid dimension in the puzzle grid. Additionally, you can set the maximum word length by providing a margin value.                                       |
+| shareLetters      | boolean |   true    | Whether words in the puzzle can share letters.                                                                                                                                                                             |
+| allowReverseWords | boolean |   true    | Whether to allow words to appear in reverse order.                                                                                                                                                                         |
+| reverseWordRatio  | number  |   0.33    | Ratio of words that can appear in reverse order in grid.                                                                                                                                                                   |
 
 ## Contributing
 
@@ -94,4 +100,6 @@ Contributions are welcome! If you have ideas for new features, improvements, or 
 
 ## License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+This project is licensed under the [MIT License](https://opensource.org/licenses/MIT) - see the LICENSE file for details.
