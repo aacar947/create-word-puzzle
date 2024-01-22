@@ -1,6 +1,6 @@
 # Create Word Puzzle
 
-Generate customizable word search puzzles of any size with this versatile npm package. Because, let's face it, what developer doesn't dream of creating puzzles instead of solving coding challenges? Or, let me do better— who doesn't need puzzles in their lives? Well, that's where Create Word Puzzle comes in. Have fun with this needfull tool.
+Generate customizable word search puzzles of any size with this versatile npm package. Because, let's face it, what developer doesn't dream of creating puzzles instead of solving coding challenges? Or, let me do better— who doesn't need puzzles in their lives? Well, that's where Create Word Puzzle comes in. Have fun with this needful tool.
 
 ## Table of Contents
 
